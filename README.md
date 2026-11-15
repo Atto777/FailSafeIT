@@ -1,4 +1,4 @@
-# FailSafeIT# FailSafe IT – relationsdatabas
+# FailSafe IT – relationsdatabas
 
 Databas för kunder, konsulter och uppdrag i Microsoft SQL Server.
 Kör `FailSafeIT.sql` i SSMS eller LocalDB. Skriptet droppar och återskapar databasen `FailSafeIT` varje gång, så det kan köras flera gånger med samma resultat (idempotent).
@@ -13,40 +13,6 @@ Skriptet innehåller:
 
 Översikt (renderas automatiskt på GitHub):
 
-```mermaid
-erDiagram
-    Specialitet ||--o{ Konsult : "har (1:M)"
-    Kund        ||--o{ Uppdrag : "beställer (1:M)"
-    Konsult     ||--o{ Uppdrag : "utför (1:M)"
-
-    Specialitet {
-        int SpecialitetId PK
-        nvarchar Namn UK
-    }
-    Kund {
-        int KundId PK
-        varchar Organisationsnummer UK
-        nvarchar Foretagsnamn
-        nvarchar Epost
-        varchar Telefonnummer
-    }
-    Konsult {
-        int KonsultId PK
-        char Personnummer UK
-        nvarchar Namn
-        decimal Timpris
-        int SpecialitetId FK
-    }
-    Uppdrag {
-        int UppdragId PK
-        int KundId FK
-        int KonsultId FK
-        date Startdatum
-        date Slutdatum
-        nvarchar Rollbeskrivning
-    }
-```
-
 ## Designval
 
 **Kopplingstabell.** Jag använder tabellen Uppdrag som kopplingstabell mellan Kund och Konsult. En kund kan anlita flera konsulter, och en konsult kan arbeta åt flera kunder. Varje rad kopplar ihop en kund med en konsult och lagrar startdatum, slutdatum och rollbeskrivning för uppdraget.
@@ -57,11 +23,11 @@ erDiagram
 
 ## Normalisering (3NF)
 
-**1NF:** Alla kolumner innehåller atomära värden (ett värde per cell) och det finns inga upprepade grupper. Varje kund, konsult och uppdrag har en egen rad, och varje tabell har en primärnyckel.
+**1NF:** Varje cell innehåller ett enda värde. Varje kund, konsult och uppdrag har en egen rad med ett unikt ID.
 
-**2NF:** Alla tabeller har en enkel primärnyckel (`KundId`, `KonsultId`, `UppdragId`, `SpecialitetId`), så inga attribut kan bero på en del av en sammansatt nyckel. Kund- och konsultuppgifter upprepas inte för varje uppdrag eftersom M:N-relationen är löst via tabellen `Uppdrag`.
+**2NF:** Alla uppgifter i en tabell hör till hela primärnyckeln. Kundens och konsultens uppgifter lagras i sina egna tabeller och kopplas ihop genom Uppdrag.
 
-**3NF:** Inga icke-nyckelattribut beror på andra icke-nyckelattribut. Kunduppgifter finns bara i `Kund` och konsultuppgifter bara i `Konsult`. Specialiteter ligger i en egen tabell, så att namnet lagras på ett ställe och inte kan stavas olika för olika konsulter.
+**3NF:** Uppgifterna beror bara på tabellens primärnyckel och inte på andra uppgifter. Specialiteter har en egen tabell, så att samma specialitet inte behöver skrivas flera gånger.
 
 ## DevSecOps-reflektion
 
