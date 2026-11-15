@@ -11,8 +11,6 @@ Skriptet innehåller:
 ## ER-diagram
 ![ER-diagram](er-diagram.png.png)
 
-Översikt (renderas automatiskt på GitHub):
-
 ## Designval
 
 **Kopplingstabell.** Jag använder tabellen Uppdrag som kopplingstabell mellan Kund och Konsult. En kund kan anlita flera konsulter, och en konsult kan arbeta åt flera kunder. Varje rad kopplar ihop en kund med en konsult och lagrar startdatum, slutdatum och rollbeskrivning för uppdraget.
