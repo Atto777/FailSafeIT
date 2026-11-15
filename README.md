@@ -9,7 +9,7 @@ Skriptet innehåller:
 - **Frågor A–E:** hämtning, JOIN, COUNT/GROUP BY, UPDATE och DELETE.
 
 ## ER-diagram
-![ER-diagram](er-diagram.png)
+![ER-diagram](er-diagram.png.png)
 
 Översikt (renderas automatiskt på GitHub):
 
